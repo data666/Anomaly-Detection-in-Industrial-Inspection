@@ -5,7 +5,7 @@ I have processed the data. You can see the detailed steps in my data_processing 
 I resized the images to 128x128 to save memory and normalized the pixel values by dividing by 255. 
 Then, I used OpenCV’s built-in function to reduce noise in the images. 
 Finally, I labeled all the images and saved them as a .mat file. 
-Because the file is quite large, I stored it in Google Drive. 
+Because the file is quite large, I stored it in Google Drive. The link will be sent to you via Slack.
 x_train contains 4283 images, and x_test contains 1071 images. 
 
 Below is the mapping dictionary:
