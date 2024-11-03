@@ -348,3 +348,37 @@ def load_model_and_predict(model_path, X_sample):
     preds = model.predict(X_sample)
 
     return model, preds
+
+
+def report_all_metrics(y_test, y_train, y_pred, X_test, classifier, model_name, to_pd, to_display=True):
+    DEFECTIVE = [i for i in range(0, 29, 2)]
+    NON_DEFECTIVE = [i for i in range(1, 29, 2)]
+    overall_performance = _report_metrics(y_test=y_test, y_train=y_train, preds=y_pred, model_name=model_name)
+    result_per_class = _report_metrics_per_class_instance(y_test=y_test,
+                                                          y_train=y_train,
+                                                          X_test=x_test,
+                                                          classifier=classifier,
+                                                          model_name=model_name,
+                                                          to_pd=to_pd)
+
+    if to_display:
+        display('Overall Performance on the test set')
+        display(overall_performance)
+        display('Results of Defective Classes')
+        display(result_per_class[result_per_class.Class.isin(DEFECTIVE)].sort_values('F1 Score', ascending=False))
+
+        display('Results of Non-Defective Classes')
+        display(result_per_class[result_per_class.Class.isin(NON_DEFECTIVE)].sort_values('F1 Score', ascending=False))
+
+    return overall_performance, result_per_class
+
+
+def train_predict_pipe(X_train: np.array, y_train: np.array, X_test: np.array, model: object,
+                       logger: logging.Logger = logger):
+    """Trains a model then predict using test data."""
+    logger.info(f' Fitting {type(model).__name__} with {len(X_train)} samples')
+    model.fit(X_train, y_train)
+
+    logger.info(f' Predicting {type(model).__name__} with {len(X_test)} samples')
+    preds = model.predict(X_test)
+    return model, preds
